@@ -14,6 +14,8 @@ const calcularItensMaisVendidos = (vendas) => {
     vendas.forEach(venda => {
         venda.produtos.forEach(produto => {
             const idProduto = produto.idProduto;
+            const dataVenda = new Date(produto.DATA_EMISSAO)
+            console.log(dataVenda);
 
             if (!itensMap[idProduto]) {
                 itensMap[idProduto] = {
@@ -24,11 +26,12 @@ const calcularItensMaisVendidos = (vendas) => {
                     ultimaVenda: new Date('2001-01-01T03:00:00.000Z')
                 };
             }
+            console.log(itensMap[idProduto].ultimaVenda);
 
             itensMap[idProduto].totalVendido += produto.quantidade;
             itensMap[idProduto].totalPreco += produto.totalItem;
             itensMap[idProduto].quantidadeVendida += 1;
-            itensMap[idProduto].ultimaVenda = itensMap[idProduto].ultimaVenda > new Date(produto.ultimaVenda) ? itensMap[idProduto].ultimaVenda : new Date(produto.ultimaVenda)
+            itensMap[idProduto].ultimaVenda = itensMap[idProduto].ultimaVenda > dataVenda ? itensMap[idProduto].ultimaVenda : dataVenda
         });
     });
 
