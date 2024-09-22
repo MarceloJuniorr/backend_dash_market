@@ -37,7 +37,7 @@ const calcularItensMaisVendidos = (vendas) => {
         descricao: item.descricao,
         quantidadeVendida: item.totalVendido,
         totalVendido: parseFloat(item.totalPreco).toFixed(2),
-        precoMedio: parseFloat(item.totalPreco / item.quantidadeVendida).toFixed(2),
+        ultimaVenda: item.ultimaVenda,
     })).sort((a, b) => {
         if (b.quantidadeVendida === a.quantidadeVendida) {
             // Ordena por ordem alfabética quando a quantidade for igual
