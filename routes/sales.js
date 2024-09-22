@@ -15,7 +15,7 @@ const calcularItensMaisVendidos = (vendas) => {
         venda.produtos.forEach(produto => {
             const idProduto = produto.idProduto;
             const dataVenda = produto.dataVenda
-            console.log(dataVenda);
+            console.log(typeof (dataVenda));
 
             if (!itensMap[idProduto]) {
                 itensMap[idProduto] = {
