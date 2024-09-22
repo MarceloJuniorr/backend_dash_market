@@ -15,7 +15,6 @@ const calcularItensMaisVendidos = (vendas) => {
         venda.produtos.forEach(produto => {
             const idProduto = produto.idProduto;
             const dataVenda = new Date(produto.dataVenda)
-            console.log(typeof (dataVenda));
 
             if (!itensMap[idProduto]) {
                 itensMap[idProduto] = {
@@ -26,7 +25,6 @@ const calcularItensMaisVendidos = (vendas) => {
                     ultimaVenda: new Date('2001-01-01T03:00:00.000Z')
                 };
             }
-            console.log(itensMap[idProduto].ultimaVenda);
 
             itensMap[idProduto].totalVendido += produto.quantidade;
             itensMap[idProduto].totalPreco += produto.totalItem;
