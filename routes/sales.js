@@ -21,12 +21,14 @@ const calcularItensMaisVendidos = (vendas) => {
                     totalVendido: 0,
                     totalPreco: 0,
                     quantidadeVendida: 0,
+                    ultimaVenda: new Date('2001-01-01T03:00:00.000Z')
                 };
             }
 
             itensMap[idProduto].totalVendido += produto.quantidade;
             itensMap[idProduto].totalPreco += produto.totalItem;
             itensMap[idProduto].quantidadeVendida += 1;
+            itensMap[idProduto].ultimaVenda = itensMap[idProduto].ultimaVenda > new Date(produto.ultimaVenda) ? itensMap[idProduto].ultimaVenda : new Date(produto.ultimaVenda)
         });
     });
 
@@ -124,7 +126,8 @@ router.get('/sales', async (req, res) => {
                 idProduto: row.ID_PRODUTO,
                 descricao: row.DESCRICAO,
                 quantidade: row.QTD,
-                totalItem: row.TOTAL_ITEM
+                totalItem: row.TOTAL_ITEM,
+                dataVenda: row.DATA_EMISSAO
             });
         });
 
