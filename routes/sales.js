@@ -61,7 +61,7 @@ const calcularClientesMaisCompraram = (vendas) => {
 
         if (!clientesMap[nomeCliente]) {
             clientesMap[nomeCliente] = {
-                nome: nomeCliente,
+                nome: nomeCliente.trim(),
                 valorTotal: 0,
                 quantidadeCompras: 0
             };
