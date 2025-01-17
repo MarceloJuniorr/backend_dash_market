@@ -51,6 +51,36 @@ const calcularItensMaisVendidos = (vendas) => {
     return itensMaisVendidos;
 };
 
+
+// Função para calcular os clientes que mais compraram
+const calcularClientesMaisCompraram = (vendas) => {
+    const clientesMap = {};
+
+    vendas.forEach(venda => {
+        const nomeCliente = venda.nome; 
+
+        if (!clientesMap[nomeCliente]) {
+            clientesMap[nomeCliente] = {
+                valorTotal: 0,
+                quantidadeCompras: 0
+            };
+        }
+
+        clientesMap[nomeCliente].valorTotal += venda.totalVenda;
+        clientesMap[nomeCliente].quantidadeCompras += 1; 
+    });
+
+    // Converte o map para um array e ordena por valor total (maior para menor)
+    const clientesMaisCompraram = Object.values(clientesMap).map(cliente => ({
+        nome: cliente.nome,
+        valorTotal: parseFloat(cliente.valorTotal).toFixed(2),
+        quantidadeCompras: cliente.quantidadeCompras
+    })).sort((a, b) => b.valorTotal - a.valorTotal);
+
+    return clientesMaisCompraram;
+};
+
+
 router.get('/sales', async (req, res) => {
     const { startDate, endDate } = req.query;
 
@@ -59,8 +89,8 @@ router.get('/sales', async (req, res) => {
     }
 
     try {
-        const query = `
-            SELECT
+        const query = `            
+        SELECT
                 v.CODIGO,
                 v.DATA_EMISSAO,
                 v.hora,
@@ -88,7 +118,6 @@ router.get('/sales', async (req, res) => {
                 v.SITUACAO <> 'C'
                 AND v.DATA_EMISSAO BETWEEN ? AND ?;
         `;
-
         const result = await queryDatabase(query, [startDate, endDate]);
 
         // Objeto para agrupar vendas e produtos
@@ -138,6 +167,7 @@ router.get('/sales', async (req, res) => {
         // Calcula as métricas
         const ticketMedio = calcularTicketMedio(valorTotal, quantidadeVendas);
         const itensMaisVendidos = calcularItensMaisVendidos(vendas);
+        const clientes = calcularClientesMaisCompraram(vendas); // Chama a função para calcular os clientes
         valorTotal = parseFloat(valorTotal).toFixed(2);
 
         // Retorna as vendas com informações adicionais
@@ -146,6 +176,7 @@ router.get('/sales', async (req, res) => {
             valorTotal,
             ticketMedio,
             itensMaisVendidos,
+            clientes, // Adiciona os clientes no JSON de resposta
             vendas
         });
     } catch (error) {
@@ -154,4 +185,4 @@ router.get('/sales', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = router
