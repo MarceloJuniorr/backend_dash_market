@@ -100,6 +100,15 @@ router.get('/sales', async (req, res) => {
                 v.SUBTOTAL,
                 v.DESCONTO,
                 v.TOTAL AS TOTAL_VENDA,
+                (SELECT SUM(pg.TOTAL) FROM vendas_fpg pg WHERE pg.vendas_master = v.codigo AND pg.id_forma = 11) AS VALOR_CREDIARIO,
+                (SELECT SUM(pg.TOTAL) FROM vendas_fpg pg WHERE pg.vendas_master = v.codigo AND pg.id_forma = 1) AS VALOR_DINHEIRO,
+                (SELECT SUM(pg.TOTAL) FROM vendas_fpg pg WHERE pg.vendas_master = v.codigo AND pg.id_forma = 2) AS VALOR_PIX,
+                (SELECT SUM(pg.TOTAL) FROM vendas_fpg pg WHERE pg.vendas_master = v.codigo AND pg.id_forma = 3) AS VALOR_DEBITO,
+                (SELECT SUM(pg.TOTAL) FROM vendas_fpg pg WHERE pg.vendas_master = v.codigo AND pg.id_forma = 4) AS VALOR_CREDITO,
+                (SELECT SUM(pg.TOTAL) FROM vendas_fpg pg WHERE pg.vendas_master = v.codigo AND pg.id_forma = 10) AS VALOR_IFOOD,
+                (SELECT SUM(pg.TOTAL) FROM vendas_fpg pg WHERE pg.vendas_master = v.codigo AND pg.id_forma = 9) AS VALOR_ALIMENTACAO,
+                (SELECT SUM(pg.TOTAL) FROM vendas_fpg pg WHERE pg.vendas_master = v.codigo AND pg.id_forma in (12,13)) AS VALOR_SEU_JOAO,
+                (SELECT SUM(pg.TOTAL) FROM vendas_fpg pg WHERE pg.vendas_master = v.codigo AND pg.id_forma = 14 ) AS VALOR_BRASILCARD,
                 v.OBSERVACOES,
                 v.SITUACAO,
                 p.item,
@@ -141,6 +150,12 @@ router.get('/sales', async (req, res) => {
                     subtotal: row.SUBTOTAL,
                     desconto: row.DESCONTO,
                     totalVenda: row.TOTAL_VENDA,
+                    totalCrediario: row.VALOR_CREDIARIO,
+                    totalDinheiro: row.VALOR_DINHEIRO,
+                    totalPix: row.VALOR_PIX,
+                    totalDebito: row.VALOR_DEBITO,
+                    totalCredito: row.VALOR_CREDITO,
+                    totalIfood: row.VALOR_IFOOD,
                     observacoes: row.OBSERVACOES,
                     situacao: row.SITUACAO,
                     produtos: [] // Inicializa o array de produtos
@@ -149,6 +164,7 @@ router.get('/sales', async (req, res) => {
                 // Incrementa o contador de vendas e o valor total
                 quantidadeVendas++;
                 valorTotal += row.TOTAL_VENDA;
+                valorTotalCrediario += row.VALOR_CREDIARIO;
             }
 
             // Adiciona o produto no array "produtos" da venda
@@ -170,11 +186,14 @@ router.get('/sales', async (req, res) => {
         const itensMaisVendidos = calcularItensMaisVendidos(vendas);
         const clientes = calcularClientesMaisCompraram(vendas); // Chama a função para calcular os clientes
         valorTotal = parseFloat(valorTotal).toFixed(2);
+        valorTotalCrediario = parseFloat(valorTotalCrediario).toFixed(2);
+
 
         // Retorna as vendas com informações adicionais
         res.json({
             quantidadeVendas,
             valorTotal,
+            valorTotalCrediario,
             ticketMedio,
             itensMaisVendidos,
             clientes, // Adiciona os clientes no JSON de resposta
