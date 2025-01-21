@@ -133,6 +133,7 @@ router.get('/sales', async (req, res) => {
         // Objeto para agrupar vendas e produtos
         const vendasMap = {};
         let valorTotal = 0; // Variável para somar o valor total das vendas
+        let valorTotalCrediario = 0;
         let quantidadeVendas = 0; // Contador de quantidade de vendas
 
         // Processa o resultado agrupando por venda
