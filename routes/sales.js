@@ -63,11 +63,13 @@ const calcularClientesMaisCompraram = (vendas) => {
             clientesMap[nomeCliente] = {
                 nome: nomeCliente.trim(),
                 valorTotal: 0,
+                valorCrediario:0,
                 quantidadeCompras: 0
             };
         }
 
         clientesMap[nomeCliente].valorTotal += venda.totalVenda;
+        clientesMap[nomeCliente.valorCrediario] += venda.totalCrediario;
         clientesMap[nomeCliente].quantidadeCompras += 1; 
     });
 
@@ -75,6 +77,7 @@ const calcularClientesMaisCompraram = (vendas) => {
     const clientesMaisCompraram = Object.values(clientesMap).map(cliente => ({
         nome: cliente.nome,
         valorTotal: parseFloat(cliente.valorTotal).toFixed(2),
+        valorCrediario: parseFloat(cliente.valorCrediario).toFixed(2),
         quantidadeCompras: cliente.quantidadeCompras
     })).sort((a, b) => b.valorTotal - a.valorTotal);
 
