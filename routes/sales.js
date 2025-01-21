@@ -69,7 +69,7 @@ const calcularClientesMaisCompraram = (vendas) => {
         }
 
         clientesMap[nomeCliente].valorTotal += venda.totalVenda;
-        clientesMap[nomeCliente.valorCrediario] += venda.totalCrediario;
+        clientesMap[nomeCliente].valorCrediario += venda.totalCrediario;
         clientesMap[nomeCliente].quantidadeCompras += 1; 
     });
 
